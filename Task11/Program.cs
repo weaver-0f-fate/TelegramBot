@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Services;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
@@ -10,7 +11,13 @@ using Telegram.Bot.Types.Enums;
 namespace Task11 {
     public class Program {
         public static async Task Main(string[] args) {
-            await DoWork2();
+            //await DoWork2();
+
+            var service = new GetCurrencyRateService();
+
+            var data = await service.GetData("test");
+
+            Console.WriteLine(data);
         }
                
         private static async Task DoWork2() {
