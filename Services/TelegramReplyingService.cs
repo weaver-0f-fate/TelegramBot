@@ -1,17 +1,17 @@
 ﻿using Services;
+using Services.Properties;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
-using Task11.Properties;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Extensions.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
-namespace Task11 {
+namespace Services {
     public class TelegramReplyingService {
         public async Task StartListening() {
             using var cts = new CancellationTokenSource();
@@ -48,14 +48,13 @@ namespace Task11 {
             }
 
             var chatId = update.Message.Chat.Id;
-            var messageText = update.Message.Text;
-            var service = new GetCurrencyRateService();
-            var answerText = await service.GetData(messageText);
+            var inputMessage = update.Message.Text;
+            var answer = await CurrencyRateService.GetCurrencyRate(inputMessage);
 
             //return asked currency rates
             await botClient.SendTextMessageAsync(
                 chatId: chatId,
-                text: answerText,
+                text: answer,
                 cancellationToken: cancellationToken);
         }
 

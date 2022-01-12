@@ -104,5 +104,14 @@ namespace Services.Properties {
                 return ResourceManager.GetString("NoDataExceptionMessage", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 5004465510:AAGfxSnFM0h6IBR5FRABV4Rbad65045l7Z4.
+        /// </summary>
+        internal static string TelegramBotKey {
+            get {
+                return ResourceManager.GetString("TelegramBotKey", resourceCulture);
+            }
+        }
     }
 }

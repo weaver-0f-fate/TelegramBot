@@ -132,4 +132,7 @@
   <data name="NoDataExceptionMessage" xml:space="preserve">
     <value>API doesn't have information about asked currency rate at specified date</value>
   </data>
+  <data name="TelegramBotKey" xml:space="preserve">
+    <value>5004465510:AAGfxSnFM0h6IBR5FRABV4Rbad65045l7Z4</value>
+  </data>
 </root>

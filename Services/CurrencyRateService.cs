@@ -1,39 +1,33 @@
 ﻿using Models;
 using Services.Properties;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Services {
-    public class GetCurrencyRateService {
+    public static class CurrencyRateService {
 
         /// <summary>
         /// Get either information about asked currency rate related to UAH, or Exception message
         /// </summary>
         /// <param name="inputMessage">Message which contains 2 strings, target currency and date (example: "USD 13.01.2020")</param>
         /// <returns>information about asked currency rate or ExceptionMessage</returns>
-        public async Task<string> GetData(string inputMessage) {
+        public static async Task<string> GetCurrencyRate(string inputMessage) {
             try {
-                DeserializeInput(inputMessage, out var currencyCode, out var date);
-
-                var currencyRates = await GetUAHRateOnSpicifiedDate(date);
-                var currencyRate = GetRequiredCurrencyRate(currencyRates, currencyCode);
+                var currencyCode = DeserializeInput(inputMessage, out var date);
+                var currencyRate = await GetRequiredCurrencyRate(currencyCode, date);
                 var data = GetAverageCurrencyRate(currencyRate);
 
-                return $"UAH to {currencyCode} rate:\n{data}";
+                return $"{date.ToShortDateString()}: 1 {currencyCode} = {data} UAH";
             }
             catch(Exception ex) {
                 return ex.Message;
             }
         }
 
-        private void DeserializeInput(string inputMessage, out string currencyCode, out DateTime date) {
+        private static string DeserializeInput(string inputMessage, out DateTime date) {
             var strings = inputMessage.Split(' ');
 
             if (strings.Length < 2) {
@@ -41,14 +35,16 @@ namespace Services {
             }
 
             if (DateTime.TryParse(strings[1], out date)) {
-                currencyCode = strings[0];
+                return strings[0].ToUpper();
             }
             else {
                 throw new Exception($"{Resources.InvalidDateExceptionMessage}. {Resources.InputPatternMessage}.");
             }
         }
 
-        private CurrencyRate GetRequiredCurrencyRate(CurrencyRates currencyRates, string currencyCode) {
+        private static async Task<CurrencyRate> GetRequiredCurrencyRate(string currencyCode, DateTime date) {
+            var currencyRates = await GetUAHRatesOnSpicifiedDate(date);
+
             var currencyRate = currencyRates
                 .ExchangeRates
                 .Where(x => x.Currency == currencyCode)
@@ -57,25 +53,22 @@ namespace Services {
             if (currencyRate is null) {
                 throw new Exception($"{Resources.NoDataExceptionMessage}.");
             }
-
             return currencyRate;
         }
 
-        private async Task<CurrencyRates> GetUAHRateOnSpicifiedDate(DateTime date) {
+        private static async Task<CurrencyRates> GetUAHRatesOnSpicifiedDate(DateTime date) {
             var client = new HttpClient();
             var uri = BuildUri(date);
             var streamTask = client.GetStreamAsync(uri);
-            var currencyRates = await JsonSerializer.DeserializeAsync<CurrencyRates>(await streamTask);
-
-            return currencyRates;
+            return await JsonSerializer.DeserializeAsync<CurrencyRates>(await streamTask);
         }
 
-        private Uri BuildUri(DateTime date) {
+        private static Uri BuildUri(DateTime date) {
             var stringDate = $"&date={date.Day}.{date.Month}.{date.Year}";
             return new Uri(Resources.ApiURL + stringDate);
         }
 
-        private double GetAverageCurrencyRate(CurrencyRate rate) {
+        private static double GetAverageCurrencyRate(CurrencyRate rate) {
             return (rate.PurchaseRateNB + rate.SaleRateNB) / 2;
         }
     }
