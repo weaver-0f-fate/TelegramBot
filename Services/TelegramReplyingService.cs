@@ -1,8 +1,5 @@
-﻿using Services;
-using Services.Properties;
+﻿using Services.Properties;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
@@ -13,6 +10,11 @@ using Telegram.Bot.Types.Enums;
 
 namespace Services {
     public class TelegramReplyingService {
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task StartListening() {
             using var cts = new CancellationTokenSource();
 

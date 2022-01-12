@@ -121,7 +121,7 @@
     <value>https://api.privatbank.ua/p24api/exchange_rates?json</value>
   </data>
   <data name="InputPatternMessage" xml:space="preserve">
-    <value>Use the following input format: "[Currency] [Date]"</value>
+    <value>Use the following input format: "[Currency] [dd.mm.yyyy]"</value>
   </data>
   <data name="InvalidDateExceptionMessage" xml:space="preserve">
     <value>Date had invalid format</value>
