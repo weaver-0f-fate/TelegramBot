@@ -14,10 +14,10 @@ namespace Services {
         /// </summary>
         /// <param name="inputMessage">Message which contains 2 strings, target currency and date (example: "USD 13.01.2020")</param>
         /// <returns>information about asked currency rate or ExceptionMessage</returns>
-        public static async Task<string> GetCurrencyRate(string inputMessage) {
+        public static async Task<string> GetCurrencyRateAsync(string inputMessage) {
             try {
                 var currencyCode = DeserializeInput(inputMessage, out var date);
-                var currencyRate = await GetRequiredCurrencyRate(currencyCode, date);
+                var currencyRate = await GetRequiredCurrencyRateAsync(currencyCode, date);
                 var data = GetAverageCurrencyRate(currencyRate);
 
                 return $"{date.ToShortDateString()}: 1 {currencyCode} = {data} UAH";
@@ -30,6 +30,7 @@ namespace Services {
         private static string DeserializeInput(string inputMessage, out DateTime date) {
             var strings = inputMessage.Split(' ');
 
+
             if(strings.Length >= 2 && DateTime.TryParse(strings[1], out date)) {
                 return strings[0].ToUpper();
             }
@@ -38,8 +39,8 @@ namespace Services {
             }
         }
 
-        private static async Task<CurrencyRate> GetRequiredCurrencyRate(string currencyCode, DateTime date) {
-            var currencyRates = await GetUAHRatesOnSpicifiedDate(date);
+        private static async Task<CurrencyRate> GetRequiredCurrencyRateAsync(string currencyCode, DateTime date) {
+            var currencyRates = await GetUAHRatesOnSpicifiedDateAsync(date);
 
             var currencyRate = currencyRates
                 .ExchangeRates
@@ -52,7 +53,7 @@ namespace Services {
             return currencyRate;
         }
 
-        private static async Task<CurrencyRates> GetUAHRatesOnSpicifiedDate(DateTime date) {
+        private static async Task<CurrencyRates> GetUAHRatesOnSpicifiedDateAsync(DateTime date) {
             var client = new HttpClient();
 
             var stringDate = $"&date={date.Day}.{date.Month}.{date.Year}";

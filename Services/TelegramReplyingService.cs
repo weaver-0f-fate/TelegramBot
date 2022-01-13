@@ -15,7 +15,7 @@ namespace Services {
         /// 
         /// </summary>
         /// <returns></returns>
-        public async Task StartListening() {
+        public async Task StartListeningAsync() {
             using var cts = new CancellationTokenSource();
 
             var botClient = new TelegramBotClient(Resources.TelegramBotKey);
@@ -51,7 +51,7 @@ namespace Services {
 
             var chatId = update.Message.Chat.Id;
             var inputMessage = update.Message.Text;
-            var answer = await CurrencyRateService.GetCurrencyRate(inputMessage);
+            var answer = await CurrencyRateService.GetCurrencyRateAsync(inputMessage);
 
             //return asked currency rates
             await botClient.SendTextMessageAsync(

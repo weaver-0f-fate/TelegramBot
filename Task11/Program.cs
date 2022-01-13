@@ -6,7 +6,7 @@ namespace Task11 {
         public static async Task Main(string[] args) {
             var bot = new TelegramReplyingService();
 
-            await bot.StartListening();
+            await bot.StartListeningAsync();
         }
     }
 }
