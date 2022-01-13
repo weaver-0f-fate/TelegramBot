@@ -70,7 +70,7 @@ namespace Services.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the following input format: &quot;[Currency] [dd.mm.yyyy]&quot;.
+        ///   Looks up a localized string similar to Use the following input format: &quot;CurrencyCode dd.mm.yyyy&quot; (Example: &quot;USD 01.01.2020&quot;).
         /// </summary>
         internal static string InputPatternMessage {
             get {

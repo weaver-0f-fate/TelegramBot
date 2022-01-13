@@ -30,15 +30,11 @@ namespace Services {
         private static string DeserializeInput(string inputMessage, out DateTime date) {
             var strings = inputMessage.Split(' ');
 
-            if (strings.Length < 2) {
-                throw new Exception($"{Resources.InvalidInputException}. {Resources.InputPatternMessage}.");
-            }
-
-            if (DateTime.TryParse(strings[1], out date)) {
+            if(strings.Length >= 2 && DateTime.TryParse(strings[1], out date)) {
                 return strings[0].ToUpper();
             }
             else {
-                throw new Exception($"{Resources.InvalidDateExceptionMessage}. {Resources.InputPatternMessage}.");
+                throw new Exception($"{Resources.InvalidInputException}. {Resources.InputPatternMessage}.");
             }
         }
 
@@ -58,14 +54,12 @@ namespace Services {
 
         private static async Task<CurrencyRates> GetUAHRatesOnSpicifiedDate(DateTime date) {
             var client = new HttpClient();
-            var uri = BuildUri(date);
-            var streamTask = client.GetStreamAsync(uri);
-            return await JsonSerializer.DeserializeAsync<CurrencyRates>(await streamTask);
-        }
 
-        private static Uri BuildUri(DateTime date) {
             var stringDate = $"&date={date.Day}.{date.Month}.{date.Year}";
-            return new Uri(Resources.ApiURL + stringDate);
+            var uri = new Uri(Resources.ApiURL + stringDate);
+            var streamTask = client.GetStreamAsync(uri);
+
+            return await JsonSerializer.DeserializeAsync<CurrencyRates>(await streamTask);
         }
 
         private static double GetAverageCurrencyRate(CurrencyRate rate) {
