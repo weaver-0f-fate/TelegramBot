@@ -1,4 +1,5 @@
-﻿using Services.Properties;
+﻿using Services.Interfaces;
+using Services.Properties;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,10 +10,10 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
 namespace Services {
-    public class TelegramReplyingService {
-        private CurrencyRateService _currencyRateService;
+    public class TelegramReplyingService : ITelegramReplyingService{
+        private ICurrencyRateService _currencyRateService;
 
-        public TelegramReplyingService(CurrencyRateService currencyRateService) {
+        public TelegramReplyingService(ICurrencyRateService currencyRateService) {
             _currencyRateService = currencyRateService;
         }
 

@@ -1,4 +1,5 @@
 ﻿using Models;
+using Services.Interfaces;
 using Services.Properties;
 using System;
 using System.Linq;
@@ -7,12 +8,12 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Services {
-    public class CurrencyRateService {
-        private CacheService _cacheService;
+    public class CurrencyRateService : ICurrencyRateService{
+        private ICacheService _cacheService;
         private HttpClient _client;
 
 
-        public CurrencyRateService(CacheService cacheService) {
+        public CurrencyRateService(ICacheService cacheService) {
             _cacheService = cacheService;
             _client = new HttpClient();
         }

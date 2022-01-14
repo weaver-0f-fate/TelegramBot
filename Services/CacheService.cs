@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Models;
+using Services.Interfaces;
 using System;
 using System.Threading.Tasks;
 
 namespace Services {
-    public class CacheService {
+    public class CacheService : ICacheService {
         private MemoryCache _cache;
 
         public CacheService() {
