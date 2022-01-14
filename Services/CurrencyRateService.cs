@@ -29,9 +29,9 @@ namespace Services {
                 var currencyRates = await _cacheService.GetOrCreateAsync(date, GetUAHRatesOnSpicifiedDateAsync);
 
                 var currencyRate = GetRequestedCurrencyRate(currencyRates, currencyCode);
-                var data = GetAverageCurrencyRate(currencyRate);
+                var averageCurrencyRate = GetAverageCurrencyRate(currencyRate);
 
-                return $"{date.ToShortDateString()}: 1 {currencyCode} = {data} UAH";
+                return $"{date.ToShortDateString()}: 1 {currencyCode} = {averageCurrencyRate} UAH";
             }
             catch(Exception ex) {
                 return ex.Message;
@@ -42,13 +42,12 @@ namespace Services {
             const int MinimalNumberOfArguments = 2;
             var strings = inputMessage.Split(' ');
 
+            //according to input pattern first string should be currency code and second date.
             if(strings.Length >= MinimalNumberOfArguments && DateTime.TryParse(strings[1], out date)) {
                 currencyCode = strings[0].ToUpper();
                 return true;
             }
-            else {
-                throw new Exception($"{Resources.InvalidInputException}. {Resources.InputPatternMessage}.");
-            }
+            throw new Exception($"{Resources.InvalidInputException}. {Resources.InputPatternMessage}."); 
         }
 
         private CurrencyRate GetRequestedCurrencyRate(CurrencyRates currencyRates, string currencyCode) {

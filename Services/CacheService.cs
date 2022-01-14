@@ -1,9 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Services {
@@ -25,13 +22,9 @@ namespace Services {
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
                     .SetSlidingExpiration(TimeSpan.FromSeconds(SecondsToExpiration));
 
-                // Save data in cache.
                 _cache.Set(key, cacheEntry, cacheEntryOptions);
             }
             return cacheEntry;
         }
-
-
-        
     }
 }
