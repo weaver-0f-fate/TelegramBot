@@ -10,11 +10,13 @@ using Telegram.Bot.Types.Enums;
 
 namespace Services {
     public class TelegramReplyingService {
+        private CurrencyRateService _currencyRateService;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
+        public TelegramReplyingService(CurrencyRateService currencyRateService) {
+            _currencyRateService = currencyRateService;
+        }
+
+       
         public async Task StartListeningAsync() {
             using var cts = new CancellationTokenSource();
 
@@ -51,7 +53,7 @@ namespace Services {
 
             var chatId = update.Message.Chat.Id;
             var inputMessage = update.Message.Text;
-            var answer = await CurrencyRateService.GetCurrencyRateAsync(inputMessage);
+            var answer = await _currencyRateService.GetCurrencyRateAsync(inputMessage);
 
             //return asked currency rates
             await botClient.SendTextMessageAsync(
